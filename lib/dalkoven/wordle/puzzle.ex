@@ -14,6 +14,7 @@ defmodule Dalkoven.Wordle.Puzzle do
   def changeset(puzzle, attrs) do
     puzzle
     |> cast(attrs, [:days_since_launch, :editor, :id, :print_date, :solution])
+    |> unique_constraint(:id)
     |> validate_required([:days_since_launch, :editor, :id, :print_date, :solution])
   end
 end
