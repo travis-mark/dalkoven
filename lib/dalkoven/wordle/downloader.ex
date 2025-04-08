@@ -18,11 +18,15 @@ defmodule Dalkoven.Wordle.Downloader do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         case Jason.decode(body) do
           {:ok, json} ->
-            result = %Dalkoven.Wordle.Puzzle{}
-            |> Dalkoven.Wordle.Puzzle.changeset(json)
-            |> Dalkoven.Repo.insert(on_conflict: Keyword.get(opts, :on_conflict, :raise))
+            result =
+              %Dalkoven.Wordle.Puzzle{}
+              |> Dalkoven.Wordle.Puzzle.changeset(json)
+              |> Dalkoven.Repo.insert(on_conflict: Keyword.get(opts, :on_conflict, :raise))
+
             case result do
-              {:ok, struct} -> struct
+              {:ok, struct} ->
+                struct
+
               {:error, insert_error} ->
                 case Dalkoven.Repo.get_by(Dalkoven.Wordle.Puzzle, id: json["id"]) do
                   nil -> {:error, insert_error}
