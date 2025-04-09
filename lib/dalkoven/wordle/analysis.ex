@@ -1,15 +1,41 @@
 defmodule Dalkoven.Wordle.Analysis do
   @doc """
+  Similar to String.to_charlist/1, but different handling for duplicate letters.
+
+  iex> Analysis.to_keylist("unite")
+  ~c"unite"
+  iex> Analysis.to_keylist("these")
+  [116, 104, 101, 115, "ee"]
+  """
+  def to_keylist(word) do
+    {result, _} =
+      word
+      |> String.to_charlist()
+      |> Enum.reduce({[], %{}}, fn char, {result, counter} ->
+        case Map.get(counter, char) do
+          nil ->
+            {[char | result], Map.put(counter, char, 1)}
+
+          count ->
+            key = String.duplicate(<<char>>, count + 1)
+            {[key | result], Map.put(counter, char, count + 1)}
+        end
+      end)
+
+    Enum.reverse(result)
+  end
+
+  @doc """
   Count the frequency of each letter for analysis
 
   iex> ["unite", "these"] |> Analysis.count_character_frequencies
-  %{101 => 3, 104 => 1, 105 => 1, 110 => 1, 115 => 1, 116 => 2, 117 => 1}
+  %{101 => 2, 104 => 1, 105 => 1, 110 => 1, 115 => 1, 116 => 2, 117 => 1, "ee" => 1}
   """
   def count_character_frequencies(words) do
     words
     |> Enum.reduce(%{}, fn word, acc ->
       word
-      |> String.to_charlist()
+      |> to_keylist
       |> Enum.reduce(acc, fn char, acc ->
         Map.update(acc, char, 1, &(&1 + 1))
       end)
@@ -21,8 +47,8 @@ defmodule Dalkoven.Wordle.Analysis do
   """
   def word_score(frequencies, word) do
     word
-    |> String.to_charlist()
-    |> Enum.reduce(0, fn char, sum -> sum + frequencies[char] end)
+    |> to_keylist
+    |> Enum.reduce(0, fn char, sum -> sum + Map.get(frequencies, char, 0) end)
   end
 
   def guess_next_word(date) do
