@@ -20,24 +20,7 @@ defmodule DalkovenWeb.Layouts do
           <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
         </a>
       </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <Layouts.right_nav current_scope={@current_scope} />
     </header>
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
@@ -90,6 +73,34 @@ defmodule DalkovenWeb.Layouts do
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 motion-safe:animate-spin" />
       </.flash>
     </div>
+    """
+  end
+
+  def right_nav(assigns) do
+    ~H"""
+    <ul class="flex flex-column px-1 space-x-4 items-center">
+      <li>
+        <.theme_toggle />
+      </li>
+      <%= if @current_scope do %>
+        <li>
+          {@current_scope.user.email}
+        </li>
+        <li>
+          <.link href={~p"/users/settings"}>Settings</.link>
+        </li>
+        <li>
+          <.link href={~p"/users/log-out"} method="delete">Log out</.link>
+        </li>
+      <% else %>
+        <li>
+          <a href={~p"/users/register"} class="btn btn-ghost">Register</a>
+        </li>
+        <li>
+          <a href={~p"/users/log-in"} class="btn btn-primary">Log in</a>
+        </li>
+      <% end %>
+    </ul>
     """
   end
 
