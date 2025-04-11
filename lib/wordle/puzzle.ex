@@ -24,7 +24,9 @@ defmodule Wordle.Puzzle do
 
   Used to keep statistical analysis or guessing from seeing today's answer.
   """
-  def solutions_older_than(date_string) do
+  def solutions_older_than(date) do
+    date_string = Date.to_string(date)
+
     query =
       from p in Wordle.Puzzle,
         where: p.print_date < ^date_string,

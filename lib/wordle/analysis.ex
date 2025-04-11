@@ -51,6 +51,16 @@ defmodule Wordle.Analysis do
     |> Enum.reduce(0, fn char, sum -> sum + Map.get(frequencies, char, 0) end)
   end
 
+  @doc """
+  Return the highest scoring word for today's puzzle.
+  """
+  def guess_next_word() do
+    guess_next_word(Date.utc_today())
+  end
+
+  @doc """
+  Return the highest scoring word for a given date.
+  """
   def guess_next_word(date) do
     allowed = Wordle.Puzzle.get_wordle_answers()
     solutions = Wordle.Puzzle.solutions_older_than(date)
