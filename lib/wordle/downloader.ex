@@ -1,4 +1,4 @@
-defmodule Dalkoven.Wordle.Downloader do
+defmodule Wordle.Downloader do
   @doc """
   Fetches Wordle puzzle metadata from the NY Times API and persists it to the database.
 
@@ -19,8 +19,8 @@ defmodule Dalkoven.Wordle.Downloader do
         case Jason.decode(body) do
           {:ok, json} ->
             result =
-              %Dalkoven.Wordle.Puzzle{}
-              |> Dalkoven.Wordle.Puzzle.changeset(json)
+              %Wordle.Puzzle{}
+              |> Wordle.Puzzle.changeset(json)
               |> Dalkoven.Repo.insert(on_conflict: Keyword.get(opts, :on_conflict, :raise))
 
             case result do
@@ -28,7 +28,7 @@ defmodule Dalkoven.Wordle.Downloader do
                 struct
 
               {:error, insert_error} ->
-                case Dalkoven.Repo.get_by(Dalkoven.Wordle.Puzzle, id: json["id"]) do
+                case Dalkoven.Repo.get_by(Wordle.Puzzle, id: json["id"]) do
                   nil -> {:error, insert_error}
                   existing -> {:ok, existing}
                 end

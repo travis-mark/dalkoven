@@ -1,4 +1,4 @@
-defmodule Dalkoven.Wordle.Puzzle do
+defmodule Wordle.Puzzle do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
@@ -26,7 +26,7 @@ defmodule Dalkoven.Wordle.Puzzle do
   """
   def solutions_older_than(date_string) do
     query =
-      from p in Dalkoven.Wordle.Puzzle,
+      from p in Wordle.Puzzle,
         where: p.print_date < ^date_string,
         select: p.solution
 

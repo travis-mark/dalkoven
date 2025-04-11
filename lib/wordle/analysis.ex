@@ -1,4 +1,4 @@
-defmodule Dalkoven.Wordle.Analysis do
+defmodule Wordle.Analysis do
   @doc """
   Similar to String.to_charlist/1, but different handling for duplicate letters.
 
@@ -52,8 +52,8 @@ defmodule Dalkoven.Wordle.Analysis do
   end
 
   def guess_next_word(date) do
-    allowed = Dalkoven.Wordle.Puzzle.get_wordle_answers()
-    solutions = Dalkoven.Wordle.Puzzle.solutions_older_than(date)
+    allowed = Wordle.Puzzle.get_wordle_answers()
+    solutions = Wordle.Puzzle.solutions_older_than(date)
     freq = count_character_frequencies(solutions)
 
     (allowed -- solutions)

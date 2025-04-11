@@ -1,7 +1,7 @@
 defmodule WordleAnalysisTest do
   use ExUnit.Case
-  alias Dalkoven.Wordle.Analysis
-  doctest Dalkoven.Wordle.Analysis
+  alias Wordle.Analysis
+  doctest Wordle.Analysis
 
   # Snapshot as of 2025-04-08
   @wordle_character_frequencies %{
