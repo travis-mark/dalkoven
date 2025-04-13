@@ -54,6 +54,11 @@ defmodule DalkovenWeb.Router do
       on_mount: [{DalkovenWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+
+      live "/items", ItemLive.Index, :index
+      live "/items/new", ItemLive.Form, :new
+      live "/items/:id", ItemLive.Show, :show
+      live "/items/:id/edit", ItemLive.Form, :edit
     end
 
     post "/users/update-password", UserSessionController, :update_password
